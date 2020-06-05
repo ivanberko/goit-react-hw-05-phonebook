@@ -1,0 +1,14 @@
+.list {
+  width: 400px;
+}
+
+.itemContact {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px 0;
+}
+
+.btnDelete {
+  float: right;
+  margin-top: 7px;
+}
