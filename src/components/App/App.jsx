@@ -1,8 +1,17 @@
 import React, { Component } from "react";
+import { CSSTransition } from "react-transition-group";
+import { v4 as uuidv4 } from "uuid";
+
+// Components
 import ContactForm from "../ContactForm/ContactForm";
 import Filter from "../Filter/Filter";
 import ContactList from "../ContactList/ContactList";
-import { v4 as uuidv4 } from "uuid";
+import Notification from "../Notification/Notification";
+
+// Styles
+import { container, title } from "./App.module.css";
+import notifyTransition from "./transition/notify.module.css";
+import showTitleTransition from "./transition/showTitle.module.css";
 
 export default class App extends Component {
   state = {
@@ -13,6 +22,8 @@ export default class App extends Component {
       { id: uuidv4(), name: "Annie Copeland", number: "227-91-26" },
     ],
     filter: "",
+    isNotify: false,
+    showTitle: false,
   };
 
   addContact = (contact) => {
@@ -24,14 +35,15 @@ export default class App extends Component {
     if (!isExistContact) {
       const contactToAdd = {
         id: uuidv4(),
-        ...contact
+        ...contact,
       };
 
       this.setState((prevState) => ({
-        contacts: [...prevState.contacts, contactToAdd],
+        contacts: [contactToAdd, ...prevState.contacts],
       }));
     } else {
-      alert(`${contact.name} is already in contacts.`);
+      this.setState({ isNotify: true });
+      setTimeout(() => this.setState({ isNotify: false }), 1500);
     }
   };
 
@@ -54,6 +66,7 @@ export default class App extends Component {
   };
 
   componentDidMount() {
+    this.setState({ showTitle: true });
     const persistedContacts = localStorage.getItem("contacts");
     if (persistedContacts) {
       const contacts = JSON.parse(persistedContacts);
@@ -69,14 +82,31 @@ export default class App extends Component {
   }
 
   render() {
-    const { contacts, filter } = this.state;
+    const { contacts, filter, isNotify, showTitle } = this.state;
     const filteredContact = this.findContact(filter, contacts);
 
     return (
-      <div>
-        <h1>Phonebook</h1>
+      <section className={container}>
+        <CSSTransition
+          in={isNotify}
+          timeout={250}
+          unmountOnExit
+          classNames={notifyTransition}
+        >
+          <Notification />
+        </CSSTransition>
+
+        <CSSTransition
+          in={showTitle}
+          timeout={500}
+          unmountOnExit
+          classNames={showTitleTransition}
+        >
+          <h1 className={title}>Phonebook</h1>
+        </CSSTransition>
+
         <ContactForm onAddContact={this.addContact} />
-        <h2>Contacts</h2>
+
         <Filter
           contacts={contacts}
           filter={filter}
@@ -86,7 +116,7 @@ export default class App extends Component {
           contacts={filteredContact}
           onDeleteContact={this.deleteContact}
         />
-      </div>
+      </section>
     );
   }
 }

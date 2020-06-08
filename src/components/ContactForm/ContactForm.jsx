@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { formAddContact } from "./ContactForm.module.css";
+import { formAddContact, buttonAdd, inputForm } from "./ContactForm.module.css";
 
 const initState = {
   name: "",
@@ -43,6 +43,7 @@ export default class ContactForm extends Component {
             name="name"
             value={name}
             onChange={this.handleChange}
+            className={inputForm}
           />
         </label>
         <label>
@@ -52,9 +53,10 @@ export default class ContactForm extends Component {
             name="number"
             value={number}
             onChange={this.handleChange}
+            className={inputForm}
           />
         </label>
-        <button type="submit">Add contact</button>
+        <button type="submit" className={buttonAdd}>Add contact</button>
       </form>
     );
   }

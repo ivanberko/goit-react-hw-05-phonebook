@@ -14,17 +14,3 @@ body {
   font-size: 18px;
 }
 
-button,
-input {
-  cursor: pointer;
-  font-family: inherit;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #232323;
-  padding: 0 10px;
-  vertical-align: middle;
-}
-
-button:active {
-  background-color: rgba(25, 8, 255, 0.534);
-}
